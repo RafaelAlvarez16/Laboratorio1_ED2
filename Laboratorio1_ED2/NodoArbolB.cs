@@ -14,7 +14,7 @@ namespace Laboratorio1_ED2
         {
             this.Data = default;
             this.Derecha = null;
-            this.Izquierda = null; 
+            this.Izquierda = null;
         }
     }
 }

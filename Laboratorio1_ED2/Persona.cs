@@ -15,6 +15,10 @@ namespace Laboratorio1_ED2
         {
             throw new NotImplementedException();
         }
+        public int CompareToNombre(string nom1, string nom2)
+        {
+            return nom1.CompareTo(nom2);
+        }
         public int CompareToString(string obj1, string obj2)
         {
             int Comparar = obj1.CompareTo(obj2);

@@ -4,15 +4,14 @@ using System.Text;
 
 namespace Laboratorio1_ED2
 {
-    public class NodoVector <T> where T : IComparable
+    
+    public class NodoVector
     {
-        public NodoArbolB<T>[] Vector { get; set; }
-        public NodoVector<T> Padre { get; set; }
-        public int Altura { get; set; }
+        public NodoArbolB[] Vector { get; set; }
 
-        public NodoVector(int MaxLenght)
+        public NodoVector()
         {
-            Vector = new NodoArbolB<T>[MaxLenght];
+            Vector = new NodoArbolB[5];
         }
     }
 }

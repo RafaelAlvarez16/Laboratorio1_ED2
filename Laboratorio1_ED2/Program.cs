@@ -6,12 +6,16 @@ using System.Text.RegularExpressions;
 
 namespace Laboratorio1_ED2
 {
-    public class Program<T> where T : IComparable
+    public class Program
     {
+        delegate int DelegadosN(string Nombre1, string Nombre2);
         static void Main(string[] args)
         {
+            EstructuraArbol MyStructur = new EstructuraArbol(5);
             var reader = new StreamReader(File.OpenRead(@"C:\Users\randr\OneDrive\Documents\URL\2022\Segundo Ciclo\Estructura ll\input.csv"));
-            ArbolPrueba<T> MyStruct = new ArbolPrueba<T>(5);
+            Persona CallDatosNombre = new Persona();
+            DelegadosN InvocarNombre = new DelegadosN(CallDatosNombre.CompareToNombre);
+
             while (!reader.EndOfStream)
             {
                 var line = reader.ReadLine();
@@ -27,7 +31,7 @@ namespace Laboratorio1_ED2
                         Fecha_Nacimiento = json1[11],
                         Direccion = json1[15]
                     };
-                    MyStruct.Insert(PersonaD);
+                    MyStructur.Insert(PersonaD.Nombre, PersonaD.DPI, PersonaD, InvocarNombre);
                 }
             }
             Console.WriteLine("Hello World!");

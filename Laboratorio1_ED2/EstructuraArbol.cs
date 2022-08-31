@@ -32,7 +32,7 @@ namespace Laboratorio1_ED2
             }
             else
             {
-                if (Nombre=="hassie")
+                if (Nombre=="gayle")
                 {
                     int a;
                     a = 9;
@@ -127,6 +127,7 @@ namespace Laboratorio1_ED2
         {
             bool Ciclo = true;
             int Rangos = 0;
+            int Modificar = 0;
             NodoArbolB Aux = new NodoArbolB();
             for (int i = 0; i <= Degree - 1 && Ciclo == true; i++)
             {
@@ -137,11 +138,19 @@ namespace Laboratorio1_ED2
                     Ciclo = false;
                 }
             }
+            Ciclo = true;
             int comp = Convert.ToInt32(Comparacion.DynamicInvoke(NodeToInsert.Nombre, Padre.Vector[0].Nombre));
             Padre.Vector = ShellSort(Padre.Vector, Comparacion);
+            for (int i = 0; i <= Degree - 1; i++)
+            {
+                if (Padre.Vector[i] == NodeToInsert)
+                {
+                    Modificar = i + 1;
+                }
+            }
             if (comp < 0)
             {
-                Padre.Vector[Rangos].Izquierda = Padre.Vector[Rangos - 1].Derecha;
+                Padre.Vector[Modificar].Izquierda = Padre.Vector[Modificar-1].Derecha;
             }
             else if (Rangos == Degree - 1)
             {

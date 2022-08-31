@@ -32,11 +32,6 @@ namespace Laboratorio1_ED2
             }
             else
             {
-                if (Nombre=="gayle")
-                {
-                    int a;
-                    a = 9;
-                }
                 Insert(NuevoMe, Raiz, comparacion);
             }
         }
@@ -96,7 +91,7 @@ namespace Laboratorio1_ED2
                 for (int i = 0; i <= Degree-2 && VerificacionEntrada; i++)
                 {
                     comp = Convert.ToInt32(Comparacion.DynamicInvoke(NewNodo.Nombre, VectorPadre.Vector[i].Nombre));
-                    if (comp < 0)
+                    if (comp <= 0)
                     {
                         comp = -1;
                         VerificacionEntrada = false;
@@ -150,7 +145,10 @@ namespace Laboratorio1_ED2
             }
             if (comp < 0)
             {
-                Padre.Vector[Modificar].Izquierda = Padre.Vector[Modificar-1].Derecha;
+                if (Modificar!=0)
+                {
+                    Padre.Vector[Modificar].Izquierda = Padre.Vector[Modificar - 1].Derecha;
+                }
             }
             else if (Rangos == Degree - 1)
             {
@@ -264,6 +262,223 @@ namespace Laboratorio1_ED2
                 }
             }
             return Vacio;
+        }
+
+        public void Delete(string nombre, string dpi, NodoVector Capsule, Delegate Comparacion)
+        {
+            bool verificar = true;
+            for (int i = 0; i < Capsule.Vector.Length - 1 && verificar; i++)
+            {
+                int comp1 = Convert.ToInt32(Comparacion.DynamicInvoke(nombre, Capsule.Vector[i].Nombre));
+                int comp2 = Convert.ToInt32(Comparacion.DynamicInvoke(dpi, Capsule.Vector[i].DPI));
+                if (comp1 == 0 && comp2 == 0)
+                {
+                    verificar = false;
+                    DeleteForm(i, Capsule, Comparacion);
+                }
+                else if (comp1 < 0)
+                {
+                    if (Capsule.Vector[i].Izquierda != null)
+                    {
+                        verificar = false;
+                        Delete(nombre, dpi, Capsule.Vector[i].Izquierda, Comparacion);
+                    }
+                }
+                else
+                {
+                    if (Capsule.Vector[i + 1] == null)
+                    {
+                        verificar = false;
+                        Delete(nombre, dpi, Capsule.Vector[i].Derecha, Comparacion);
+                    }
+                    else
+                    {
+                    }
+                }
+            }
+        }
+        public void DeleteForm(int num, NodoVector Vector, Delegate Comparacion)
+        {
+            if (Vector.Vector[num].Derecha == null && Vector.Vector[num].Izquierda == null) //verificar si no tiene hijos
+            {
+                if (Vector.Padre==null) //verificar si no tiene padre
+                {
+                    if (Vector.Vector[num + 1] == null)
+                    {
+                        Vector.Vector[num] = null;
+                    }
+                    else
+                    {
+                        Vector.Vector[num] = null;
+                        OrdenarEspacios(Vector, num);
+                    }
+                }
+                else // es un vector sin hijos pero con un padre hoja
+                {
+                    int Minposible = 0;
+                    int PoseeHojas = 0;
+                    if (Impar())
+                    {
+                        Minposible = (Degree / 2) - 1;
+                    }
+                    else
+                    {
+                        Minposible = (Degree / 2);
+                    }
+                    for (int i = 0; i < Degree-2; i++)
+                    {
+                        if (Vector.Vector[i] != null)
+                        {
+                            PoseeHojas++;
+                        }
+                    }
+                    if (PoseeHojas==Minposible) //posee lo mismo que las hojas
+                    {
+
+                    }
+                    else if (Minposible < PoseeHojas)//tiene mas del minimo en las hojas
+                    {
+                        Vector.Vector[num] = null;
+                        OrdenarEspacios(Vector, num);
+                    }
+                }
+            }
+            else //si tiene hijos 
+            {
+                if (Vector.Padre==null)//ver si tien padre
+                {
+                    if (Vector.Vector[1]==null)
+                    {
+                        int hijosizqmas = 0;
+                        int hijosizqmen = 0;
+                        NodoArbolB Auxiliar = new NodoArbolB();
+                        for (int i = 0; i < Vector.Padre.Vector.Length; i++)
+                        {
+                            if (Vector.Vector[0].Izquierda.Vector[i] != null)
+                            {
+                                hijosizqmen++;
+                            }
+                            if (Vector.Vector[0].Derecha.Vector[i] != null)
+                            {
+                                hijosizqmas++;
+                            }
+                        }
+                        if (hijosizqmen > hijosizqmas)
+                        {
+                            Vector.Vector[0] = Vector.Vector[0].Izquierda.Vector[hijosizqmen - 1];
+                            Vector.Vector[0].Izquierda.Vector[hijosizqmen - 1] = null;
+                        }
+                        else if (hijosizqmas>hijosizqmen)
+                        {
+                            Vector.Vector[0] = Vector.Vector[0].Derecha.Vector[0];
+                            Vector.Vector[0].Derecha.Vector[0] = null;
+                            OrdenarEspacios(Vector.Vector[0].Derecha, 0);
+                        }
+                        else
+                        {
+                            for (int i = 0; i < hijosizqmen; i++)
+                            {
+                                Vector.Vector[i] = Vector.Vector[i].Izquierda.Vector[i];
+                            }
+                            for (int i = hijosizqmas - 1; i < Vector.Vector.Length; i++)
+                            {
+                                if (hijosizqmas > 0)
+                                {
+                                    int a = 0;
+                                    Vector.Vector[i] = Vector.Vector[i].Derecha.Vector[a];
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        public void OrdenarEspacios(NodoVector Vector, int num) 
+        {
+            bool verificacion = true;
+            for (int i = num; i < Vector.Vector.Length - 2 && verificacion; i++)
+            {
+                NodoArbolB Aux = null;
+                if (Vector.Vector[i + 1] != null)
+                {
+                    Aux = Vector.Vector[i + 1];
+                    Vector.Vector[i] = Aux;
+                    Vector.Vector[i + 1] = null;
+                }
+            }
+        }
+        List<Persona> NuevaLista = new List<Persona>();
+        public void limpiar() 
+        {
+            NuevaLista.Clear();
+        }
+        public List<Persona> retornar() 
+        {
+            return NuevaLista;
+        }
+        public void Buscar(string nombre, NodoVector Padre, Delegate Comparacion)
+        {
+            NodoArbolB Aux = new NodoArbolB();
+            bool Encontrado = true;
+            if (Padre != null)
+            {
+                int num = HasNode(Padre.Vector);
+                if (Padre != null)
+                {
+                    for (int i = 0; i < num && Encontrado; i++)
+                    {
+                        if (Padre.Vector[i] != null)
+                        {
+                            int Comp = Convert.ToInt32(Comparacion.DynamicInvoke(nombre, Padre.Vector[i].Nombre));
+                            if (Comp == 0)
+                            {
+                                Encontrado = false;
+                                Aux.Nuevo = Padre.Vector[i].Nuevo;
+                                NuevaLista.Add(Aux.Nuevo);
+                                if (Padre.Vector[i].Izquierda != null)
+                                {
+                                    Buscar(nombre, Padre.Vector[i].Izquierda, Comparacion);
+                                }
+
+                            }
+                            else if (Comp < 0)
+                            {
+                                Buscar(nombre, Padre.Vector[i].Izquierda, Comparacion);
+                            }
+                            else
+                            {
+                            }
+                        }
+                        else
+                        {
+                        }
+                    }
+                }
+            }
+        }
+        public int HasNode(NodoArbolB[] Verificar)
+        {
+            int i = 0;
+            return HasNode(Verificar, i);
+        }
+
+        public int HasNode(NodoArbolB[] Verificar, int Contador)
+        {
+            if (Contador == Degree - 1)
+            {
+                return Contador;
+            }
+            else
+            {
+                if (Verificar[Contador] != null)
+                {
+                    return HasNode(Verificar, Contador + 1);
+                }
+                else
+                {
+                    return Contador;
+                }
+            }
         }
     }
 }

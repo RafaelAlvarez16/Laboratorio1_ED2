@@ -10,6 +10,7 @@ namespace Laboratorio1_ED2
         public string DPI { get; set; }
         public string Fecha_Nacimiento { get; set; }
         public string Direccion { get; set; }
+        public List<string> Companias { get; set; }
 
         public int CompareTo(object obj)
         {

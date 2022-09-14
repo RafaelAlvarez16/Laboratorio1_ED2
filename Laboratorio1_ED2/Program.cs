@@ -13,86 +13,91 @@ namespace Laboratorio1_ED2
         delegate int DelegadosN(string Nombre1, string Nombre2);
         public static void Main(string[] args)
         {
-            List<Persona> Nueva = new List<Persona>();
+            EstructuraHash estructuraHash = new EstructuraHash();
             List<Persona> Nueva2 = new List<Persona>();
-            EstructuraArbol MyStructur = new EstructuraArbol(5);
-            var reader = new StreamReader(File.OpenRead(@"C:\Users\randr\OneDrive\Documents\URL\2022\Segundo Ciclo\Estructura ll\input.csv"));
-            Persona CallDatosNombre = new Persona();
-            DelegadosN InvocarNombre = new DelegadosN(CallDatosNombre.CompareToNombre);
-            int cont = 0;
+            Dictionary<string, string> Diccionario = new Dictionary<string, string>();
+            NodoVector[] TablaHash = new NodoVector[300];
+            for (int i = 0; i < 300; i++)
+            {
+                TablaHash[i] = new NodoVector();
+            }
+
+            var reader = new StreamReader(File.OpenRead(@"C:\Users\randr\OneDrive\Documents\URL\2022\Segundo Ciclo\Estructura ll\input (1).csv"));
+            
             bool verificar = true;
             while (!reader.EndOfStream && verificar)
             {
-                cont++;
-                if (cont==19)
-                {
-                    verificar = false;
-                }
+                List<string> Nueva1 = new List<string>();
+
                 var line = reader.ReadLine();
                 var values = line.Split(';');
                 var json1 = values[1].Split('"');
 
-                if (values[0] == "\"INSERT")
+                for (int i = 19; i < json1.Length; i++)
+                {
+                    Nueva1.Add(json1[i]);
+                    i++;
+                }
+
+                if (values[0] == "INSERT")
                 {
                     var PersonaD = new Persona
                     {
-                        Nombre = json1[6],
-                        DPI = json1[12],
-                        Fecha_Nacimiento = json1[18],
-                        Direccion = json1[24]
-                        //Nombre = json1[3],
-                        //DPI = json1[7],
-                        //Fecha_Nacimiento = json1[11],
-                        //Direccion = json1[15]
+                        //COMPANIES 17
+                        Nombre = json1[3],
+                        DPI = json1[7],
+                        Fecha_Nacimiento = json1[11],
+                        Direccion = json1[15],
+                        Companias = Nueva1
                     };
                     Nueva2.Add(PersonaD);
-                    MyStructur.Insert(PersonaD.Nombre, PersonaD.DPI, PersonaD, InvocarNombre);
                 }
-                else if (values[0]=="\"PATCH")
+                else if (values[0]=="PATCH")
                 {
-                    var PersonaDos = new Persona
+                    var PersonaN = new Persona
                     {
-                        Nombre = json1[6],
-                        DPI = json1[12],
-                        Fecha_Nacimiento = json1[18],
-                        Direccion = json1[24]
-                        //Nombre = json1[3],
-                        //DPI = json1[7],
-                        //Fecha_Nacimiento = json1[11],
-                        //Direccion = json1[15]
+                        //COMPANIES 17
+                        Nombre = json1[3],
+                        DPI = json1[7],
+                        Fecha_Nacimiento = json1[11],
+                        Direccion = json1[15],
+                        Companias = Nueva1
                     };
                     for (int i = 0; i < Nueva2.Count; i++)
                     {
-                        if (PersonaDos.Nombre==Nueva2[i].Nombre && PersonaDos.DPI == Nueva2[i].DPI)
+                        if (PersonaN.DPI == Nueva2[i].DPI)
                         {
-                            Nueva2[i] = PersonaDos;
+                            Nueva2.RemoveAt(i);
+                            i = 400;
                         }
                     }
+                    Nueva2.Add(PersonaN);
                 }
                 else
                 {
-                    var Personat = new Persona
+                    var PersonaN = new Persona
                     {
-                        Nombre = json1[6],
-                        DPI = json1[12],
-                        Fecha_Nacimiento = json1[18],
-                        Direccion = json1[24]
-                        //Nombre = json1[3],
-                        //DPI = json1[7],
-                        //Fecha_Nacimiento = json1[11],
-                        //Direccion = json1[15]
+                        //COMPANIES 17
+                        Nombre = json1[3],
+                        DPI = json1[7],
+                        Fecha_Nacimiento = json1[11],
+                        Direccion = json1[15],
+                        Companias = Nueva1
                     };
+
                     for (int i = 0; i < Nueva2.Count; i++)
                     {
-                        if (Personat.Nombre == Nueva2[i].Nombre && Personat.DPI == Nueva2[i].DPI)
+                        if (PersonaN.DPI==Nueva2[i].DPI)
                         {
                             Nueva2.RemoveAt(i);
+                            i = 400;
                         }
                     }
                 }
 
             }
             bool openArbol = true;
+            bool Openconpanimes = true;
             while (openArbol)
             {
                 Console.WriteLine();
@@ -102,22 +107,41 @@ namespace Laboratorio1_ED2
                 int op= Convert.ToInt32(Console.ReadLine());
                 if (op==1)
                 {
-                    Console.WriteLine("Ingrese nombre");
+                    Console.WriteLine("Ingrese Nombre");
                     string opcion = Convert.ToString(Console.ReadLine());
+                    Console.WriteLine("Ingrese DPI");
+                    string opcion2 = Convert.ToString(Console.ReadLine());
                     Console.WriteLine("Las datos encontrados son:");
-                    //MyStructur.limpiar();
-                    //MyStructur.Buscar(opcion, MyStructur.Raiz, InvocarNombre);
-                    //Nueva = MyStructur.retornar();
-                    //for (int i = 0; i < Nueva.Count; i++)
-                    //{
-                    //    Console.WriteLine("name:" + Nueva[i].Nombre + " DPI:" + Nueva[i].DPI + " Address:" + Nueva[i].Direccion + " Fecha:" + Nueva[i].Fecha_Nacimiento);
-                    //}
-
                     for (int i = 0; i < Nueva2.Count; i++)
                     {
-                        if (opcion == Nueva2[i].Nombre)
+                        if (opcion == Nueva2[i].Nombre && opcion2==Nueva2[i].DPI)
                         {
+                            //SI ENCONTRO EL NOMBRE QUE ESTA BUSCANDO SE CODIFICA ANTES DE IMPRIMIR
+
                             Console.WriteLine("name:" + Nueva2[i].Nombre + " DPI:" + Nueva2[i].DPI + " Address:" + Nueva2[i].Direccion + " Fecha:" + Nueva2[i].Fecha_Nacimiento);
+                            Console.WriteLine("Companias:");
+                            for (int j = 0; j < Nueva2[i].Companias.Count; j++)
+                            {
+                                string nuevoE = estructuraHash.LZ78_Encode(opcion2, Nueva2[i].Companias[j]);
+                                Console.WriteLine("     " + Nueva2[i].Companias[j] + "   DPI:" + nuevoE);
+                                Diccionario.Add(Nueva2[i].Companias[j], nuevoE);
+                            }
+                        }
+                    }
+
+                    while (Openconpanimes)
+                    {
+                        Console.WriteLine("Para salir seleccione 1");
+                        Console.WriteLine("Ingrese nombre de Compania");
+                        string opcion3 = Convert.ToString(Console.ReadLine());
+                        if (opcion3 !=  "1")
+                        {
+                            string nuevoA = estructuraHash.LZ78_Dencode(Diccionario[opcion3]) ;
+                            Console.WriteLine(nuevoA);
+                        }
+                        else
+                        {
+                            Openconpanimes = false;
                         }
                     }
                 }

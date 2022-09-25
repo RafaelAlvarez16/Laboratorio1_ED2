@@ -112,6 +112,9 @@ namespace Laboratorio1_ED2
                     Console.WriteLine("Ingrese DPI");
                     string opcion2 = Convert.ToString(Console.ReadLine());
                     Console.WriteLine("Las datos encontrados son:");
+                    List<string> Dicciona = new List<string>();
+                    List<string> EncodeDicciona = new List<string>();
+
                     for (int i = 0; i < Nueva2.Count; i++)
                     {
                         if (opcion == Nueva2[i].Nombre && opcion2==Nueva2[i].DPI)
@@ -124,11 +127,13 @@ namespace Laboratorio1_ED2
                             {
                                 string nuevoE = estructuraHash.LZ78_Encode(opcion2, Nueva2[i].Companias[j]);
                                 Console.WriteLine("     " + Nueva2[i].Companias[j] + "   DPI:" + nuevoE);
-                                Diccionario.Add(Nueva2[i].Companias[j], nuevoE);
+                                Dicciona.Add(Nueva2[i].Companias[j]);
+                                EncodeDicciona.Add(nuevoE);
                             }
+                            i = Nueva2.Count;
                         }
                     }
-
+                    Openconpanimes = true;
                     while (Openconpanimes)
                     {
                         Console.WriteLine("Para salir seleccione 1");
@@ -136,8 +141,16 @@ namespace Laboratorio1_ED2
                         string opcion3 = Convert.ToString(Console.ReadLine());
                         if (opcion3 !=  "1")
                         {
-                            string nuevoA = estructuraHash.LZ78_Dencode(Diccionario[opcion3]) ;
-                            Console.WriteLine(nuevoA);
+                            for (int i = 0; i<Dicciona.Count ; i++)
+                            {
+                                if (Dicciona[i]==opcion3)
+                                {
+                                    string nuevoA = estructuraHash.LZ78_Dencode(EncodeDicciona[i]);
+                                    Console.WriteLine(nuevoA);
+                                    i = Dicciona.Count;
+                                }
+                            }
+
                         }
                         else
                         {

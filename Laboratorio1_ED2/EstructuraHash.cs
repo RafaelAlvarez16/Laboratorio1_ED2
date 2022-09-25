@@ -22,7 +22,7 @@ namespace Laboratorio1_ED2
                 cadenaaux = arr[i].ToString();
                 if (i == 0)
                 {
-                    Diccionario.Add(1, "0" + "," + arr[0].ToString());
+                    Diccionario.Add(1, "0" + "_" + arr[0].ToString());
                     Aux.Add(arr[0].ToString());
                     countdiccionario++;
                 }
@@ -43,7 +43,7 @@ namespace Laboratorio1_ED2
                             else
                             {
                                 int posicion = VerificarPosicion(Aux, cadenaaux);
-                                Diccionario.Add(countdiccionario, (posicion + 1).ToString() + "," + arr[j + 1].ToString());
+                                Diccionario.Add(countdiccionario, (posicion + 1).ToString() + "_" + arr[j + 1].ToString());
                                 Aux.Add(cadena);
                                 j = arr.Length;
                                 i += cont;
@@ -57,7 +57,7 @@ namespace Laboratorio1_ED2
                         else
                         {
                             int posicion = VerificarPosicion(Aux, cadenaaux);
-                            Diccionario.Add(countdiccionario, (posicion + 1).ToString() + "," + "null");
+                            Diccionario.Add(countdiccionario, (posicion + 1).ToString() + "_" + " ");
                             Aux.Add(cadena);
                             j = arr.Length;
                             i += cont;
@@ -68,7 +68,7 @@ namespace Laboratorio1_ED2
                 }
                 else //entro si no existe dentro del diccionario
                 {
-                    Diccionario.Add(countdiccionario, "0" + "," + arr[i].ToString());
+                    Diccionario.Add(countdiccionario, "0" + "_" + arr[i].ToString());
                     Aux.Add(arr[i].ToString());
                     countdiccionario++;
                 }
@@ -115,7 +115,7 @@ namespace Laboratorio1_ED2
             }
             for (int i = 0; i < Diccionario.Count; i++)
             {
-                var val = Diccionario[i+1].Split(",");
+                var val = Diccionario[i+1].Split("_");
                 if (val[0]=="0")
                 {
                     valoressep[i] = val[1];

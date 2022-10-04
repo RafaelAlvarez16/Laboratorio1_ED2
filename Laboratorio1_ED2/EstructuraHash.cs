@@ -6,10 +6,10 @@ namespace Laboratorio1_ED2
 {
     public class EstructuraHash
     {
-        public string LZ78_Encode(string dpi, string empresa)
+        public string LZ78_Encode(string nuevos)
         {
             Dictionary<int, string> Diccionario = new Dictionary<int, string>();
-            string nuevo = empresa +" "+ dpi;
+            string nuevo =nuevos;
             char[] arr = nuevo.ToCharArray(0, nuevo.Length);
             List<string> Aux = new List<string>();
             string cadena = "";

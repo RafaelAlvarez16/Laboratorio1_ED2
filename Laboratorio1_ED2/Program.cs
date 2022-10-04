@@ -22,7 +22,7 @@ namespace Laboratorio1_ED2
                 TablaHash[i] = new NodoVector();
             }
 
-            var reader = new StreamReader(File.OpenRead(@"C:\Users\randr\OneDrive\Documents\URL\2022\Segundo Ciclo\Estructura ll\input (1).csv"));
+            var reader = new StreamReader(File.OpenRead(@"C:\Users\randr\Downloads\input.csv"));
             
             bool verificar = true;
             while (!reader.EndOfStream && verificar)
@@ -111,64 +111,72 @@ namespace Laboratorio1_ED2
                     string opcion = Convert.ToString(Console.ReadLine());
                     Console.WriteLine("Ingrese DPI");
                     string opcion2 = Convert.ToString(Console.ReadLine());
+                    Console.WriteLine();
                     Console.WriteLine("Las datos encontrados son:");
                     List<string> Dicciona = new List<string>();
                     List<string> EncodeDicciona = new List<string>();
-
+                    int PosiDPI = 0;
+                    int globa = 1;
                     for (int i = 0; i < Nueva2.Count; i++)
                     {
                         if (opcion == Nueva2[i].Nombre && opcion2==Nueva2[i].DPI)
                         {
+                            PosiDPI = i;
                             //SI ENCONTRO EL NOMBRE QUE ESTA BUSCANDO SE CODIFICA ANTES DE IMPRIMIR
-
                             Console.WriteLine("name:" + Nueva2[i].Nombre + " DPI:" + Nueva2[i].DPI + " Address:" + Nueva2[i].Direccion + " Fecha:" + Nueva2[i].Fecha_Nacimiento);
-                            Console.WriteLine("Companias:");
-                            for (int j = 0; j < Nueva2[i].Companias.Count; j++)
+                            int conta = 1;
+                            bool badenra = true;
+                            while (badenra)
                             {
-                                string nuevoE = estructuraHash.LZ78_Encode(opcion2, Nueva2[i].Companias[j]);
-                                Console.WriteLine("     " + Nueva2[i].Companias[j] + "   DPI:" + nuevoE);
-                                Dicciona.Add(Nueva2[i].Companias[j]);
-                                EncodeDicciona.Add(nuevoE);
+                                bool siexiste = File.Exists(@"C:\Users\randr\OneDrive\Escritorio\Cartes de Recomendacion\inputs\inputs\REC-" + Nueva2[i].DPI + "-"+conta+".txt");
+                                if (siexiste)
+                                {
+                                    Console.WriteLine("REC-" + Nueva2[i].DPI + "-" + conta + ".txt");
+                                    string text = System.IO.File.ReadAllText(@"C:\Users\randr\OneDrive\Escritorio\Cartes de Recomendacion\inputs\inputs\REC-" + Nueva2[i].DPI + "-"+conta+".txt");
+                                    string cartacodificada=estructuraHash.LZ78_Encode(text);
+                                    System.IO.File.WriteAllText(@"C:\Users\randr\OneDrive\Escritorio\Cartes de Recomendacion\output\"+"compressed-REC-"+Nueva2[i].DPI+conta+".txt", cartacodificada);
+                                    Console.WriteLine("compressed-REC-" + Nueva2[i].DPI + conta + ".txt");
+                                    conta++;
+                                }
+                                else
+                                {
+                                    badenra = false;
+                                }
+                                Console.WriteLine();
                             }
-                            i = Nueva2.Count;
+                            //Console.WriteLine("Companias:");
+                            //for (int j = 0; j < Nueva2[i].Companias.Count; j++)
+                            //{
+                            //    string nuevoE = estructuraHash.LZ78_Encode(opcion2, Nueva2[i].Companias[j]);
+                            //    Console.WriteLine("     " + Nueva2[i].Companias[j] + "   DPI:" + nuevoE);
+                            //    Dicciona.Add(Nueva2[i].Companias[j]);
+                            //    EncodeDicciona.Add(nuevoE);
+                            //}
+                            //i = Nueva2.Count;
                         }
                     }
                     Openconpanimes = true;
                     while (Openconpanimes)
                     {
                         Console.WriteLine("Para salir seleccione 1");
-                        Console.WriteLine("Ingrese nombre de Compania");
+                        Console.WriteLine("Ingrese la carta que desea descomprimir");
                         string opcion3 = Convert.ToString(Console.ReadLine());
                         if (opcion3 !=  "1")
                         {
-                            for (int i = 0; i<Dicciona.Count ; i++)
+                            bool siexiste = File.Exists(@"C:\Users\randr\OneDrive\Escritorio\Cartes de Recomendacion\output\"+opcion3);
+                            if (siexiste)
                             {
-                                if (Dicciona[i]==opcion3)
-                                {
-                                    string nuevoA = estructuraHash.LZ78_Dencode(EncodeDicciona[i]);
-                                    Console.WriteLine(nuevoA);
-                                    i = Dicciona.Count;
-                                }
+                                string text = System.IO.File.ReadAllText(@"C:\Users\randr\OneDrive\Escritorio\Cartes de Recomendacion\output\"+opcion3);
+                                string cartacodificada = estructuraHash.LZ78_Dencode(text);
+                                System.IO.File.WriteAllText(@"C:\Users\randr\OneDrive\Escritorio\Cartes de Recomendacion\newInput\" + "desscompressed-REC-" + Nueva2[PosiDPI].DPI + globa+".txt", cartacodificada);
+                                globa++;
                             }
-
                         }
                         else
                         {
                             Openconpanimes = false;
                         }
                     }
-                }
-                else if (op==5)
-                {
-
-                }
-                else if (op==3)
-                {
-
-                }
-                else if (op==4)
-                {
-
                 }
                 else if (op==2)
                 {
@@ -177,9 +185,6 @@ namespace Laboratorio1_ED2
                 else
                 {
                     Console.WriteLine("No existe la opcion");
-                }
-                {
-
                 }
 
             }
